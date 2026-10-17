@@ -1,0 +1,543 @@
+/* ===========================================================
+   TIB COMPT — Facture
+   Style sobre "document imprimé" : gris/taupe, sans dégradés
+   =========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --ink: #211e1c;
+    --ink-soft: #6f6a64;
+    --taupe: #948a80;
+    --taupe-dark: #6d655c;
+    --bg-page: #ece9e4;
+    --paper: #ffffff;
+    --line: #ddd8d1;
+    --line-strong: #c7c0b6;
+    --accent-alert: #b3413a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 40px 20px 80px;
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    background: var(--bg-page);
+    min-height: 100vh;
+}
+
+/* ---------- Page / carte facture ---------- */
+.page {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--paper);
+    border-radius: 4px;
+    box-shadow: 0 2px 14px rgba(33, 30, 28, 0.12);
+    padding: 44px 48px 50px;
+    position: relative;
+    border: 1px solid var(--line);
+}
+
+/* ---------- Boutons du haut (Enregistrer + Imprimer) ---------- */
+.top-actions {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    gap: 8px;
+    z-index: 5;
+}
+
+.print-btn,
+.save-btn {
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 3px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 11.5px;
+    cursor: pointer;
+    transition: opacity .15s ease;
+}
+.print-btn:hover,
+.save-btn:hover { opacity: 0.82; }
+
+.save-btn {
+    background: var(--taupe-dark);
+}
+
+/* ---------- En-tête / marque ---------- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 0 0 auto;
+}
+
+.brand img {
+    width: auto;
+    max-width: 170px;
+    height: auto;
+    max-height: 110px;
+    display: block;
+    object-fit: contain;
+}
+
+.brand-text .tagline {
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-weight: 500;
+}
+
+.brand-text .company {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 21px;
+    color: var(--ink);
+    letter-spacing: 0.3px;
+}
+.brand-text .company span {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-transform: lowercase;
+}
+
+.brand-text .subtitle {
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-weight: 500;
+}
+
+.title {
+    text-align: right;
+}
+
+.title h1 {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--ink);
+}
+
+.facture-num {
+    margin-top: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    letter-spacing: 0.3px;
+}
+.facture-num input {
+    border: none;
+    background: transparent;
+    border-bottom: 1.5px solid var(--line-strong);
+    padding: 2px 4px;
+    font-weight: 700;
+    color: var(--ink);
+    width: 90px;
+    text-align: center;
+}
+
+/* ---------- Barre date ---------- */
+.date-bar {
+    margin-top: 16px;
+    background: var(--taupe);
+    color: #f8f4f495;
+    display: inline-block;
+    font-weight: 700;
+    font-size: 12.5px;
+    letter-spacing: 0.5px;
+    padding: 8px 18px;
+    border-radius: 3px;
+}
+.date-bar input {
+    border: none;
+    background: transparent;
+    padding: 0 4px;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    font-weight: 700;
+}
+.date-bar input::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+/* ---------- Inputs génériques ---------- */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    border: none;
+    outline: none;
+    background: transparent;
+    border-bottom: 1.5px solid var(--line);
+    padding: 4px 2px;
+    transition: border-color .15s ease;
+}
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+textarea:focus {
+    border-color: var(--ink);
+}
+input::placeholder, textarea::placeholder {
+    color: #b3aca2;
+}
+
+/* ---------- Infos client ---------- */
+.client-info {
+    margin-top: 22px;
+}
+.client-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 10px;
+    letter-spacing: 0.2px;
+}
+.client-line:last-child { margin-bottom: 0; }
+.client-line input {
+    flex: 1;
+    font-weight: 500;
+    padding: 4px 6px;
+}
+.client-line .client-name { flex: 0 0 260px; font-weight: 700; }
+
+/* ---------- Adresse / Encaissement ---------- */
+.address-encaissement {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 0;
+    margin-top: 22px;
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.bar {
+    background: var(--taupe);
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.6px;
+    padding: 9px 16px;
+}
+
+.address-col {
+    border-right: 1px solid var(--line-strong);
+}
+
+.address-col .address-input {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    border-bottom: none;
+}
+
+.encaissement-col .checks {
+    padding: 14px 16px 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.encaissement-col label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+}
+.encaissement-col input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--ink);
+}
+
+.montant-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px 16px;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink);
+}
+.montant-row input {
+    width: 110px;
+    text-align: right;
+    font-weight: 800;
+    color: var(--ink);
+    border-bottom: 1.5px solid var(--line-strong);
+}
+
+/* ---------- Table prestations ---------- */
+#invoice {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 26px;
+    border: 1px solid var(--line-strong);
+}
+#invoice thead th {
+    background: var(--taupe);
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.6px;
+    text-align: left;
+    padding: 11px 16px;
+}
+#invoice thead th.col-qty { text-align: center; width: 110px; }
+#invoice thead th.col-montant { text-align: right; width: 160px; }
+
+#invoice tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--line);
+    background: #fff;
+}
+#invoice tbody tr:nth-child(even) td { background: #f7f5f2; }
+
+#invoice tbody td input[type="text"] {
+    width: 100%;
+    border-bottom: none;
+}
+#invoice tbody td input.qty {
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+    color: var(--ink);
+    border-bottom: none;
+}
+#invoice tbody td input.amount {
+    width: 100%;
+    text-align: right;
+    font-weight: 700;
+    color: var(--ink);
+    border-bottom: none;
+}
+
+.delete-row {
+    border: none;
+    background: #f3e2e0;
+    color: var(--accent-alert);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    transition: opacity .15s ease;
+}
+.delete-row:hover { opacity: 0.75; }
+
+/* ---------- Bouton ajouter ---------- */
+.add {
+    margin-top: 14px;
+    background: #fff;
+    color: var(--ink);
+    border: 1.5px dashed var(--line-strong);
+    border-radius: 3px;
+    padding: 10px 18px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .15s ease;
+}
+.add:hover {
+    background: #f7f5f2;
+}
+
+/* ---------- Bas de page : mots + totaux ---------- */
+.bottom-section {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 24px;
+    margin-top: 30px;
+    align-items: start;
+}
+
+.words b {
+    display: block;
+    font-size: 12.5px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+}
+.words textarea {
+    width: 100%;
+    min-height: 60px;
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid var(--line);
+    padding: 4px 2px;
+    resize: vertical;
+}
+
+.totals {
+    width: 100%;
+    border-collapse: collapse;
+}
+.totals td {
+    padding: 10px 4px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--line);
+}
+.totals td:last-child {
+    text-align: right;
+    font-weight: 700;
+    color: var(--ink);
+}
+.totals tr.grand td {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--ink);
+    border-bottom: none;
+    border-top: 2px solid var(--ink);
+    padding-top: 12px;
+}
+
+/* ---------- Signature ---------- */
+.signature {
+    margin-top: 34px;
+    display: flex;
+    justify-content: flex-end;
+}
+.sign-box {
+    width: 220px;
+    height: 90px;
+    border: 1.5px dashed var(--line-strong);
+    border-radius: 3px;
+}
+
+/* ---------- Pied de page ---------- */
+footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line-strong);
+    text-align: center;
+}
+footer p {
+    margin: 3px 0;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+}
+footer p b { color: var(--ink); }
+
+/* ---------- Bouton CTA (hors carte) ---------- */
+.cta {
+    display: block;
+    margin: 30px auto 0;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    padding: 14px 34px;
+    border-radius: 3px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: opacity .15s ease;
+}
+.cta:hover {
+    opacity: 0.85;
+}
+
+/* ---------- Impression ---------- */
+@page {
+    size: A4;
+    margin: 0;              /* supprime l'en-tête / pied de page du navigateur */
+}
+
+@media print {
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;   /* garde les barres taupe */
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: #fff;
+        height: auto;
+        min-height: 0;
+    }
+
+    .page {
+        display: flex;
+        flex-direction: column;
+        min-height: 296mm;          /* légèrement sous 297mm : évite une 2e page vide */
+        box-shadow: none;
+        border-radius: 0;
+        border: none;
+        max-width: 100%;
+        margin: 0;
+        padding: 10mm 14mm 8mm;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .print-btn, .save-btn, .top-actions, .cta, .no-print, .add, .account-bar {
+        display: none !important;
+    }
+
+    input, textarea { border-bottom: none !important; }
+
+    /* à l'impression : n'afficher que le(s) mode(s) d'encaissement coché(s) */
+    .checks:has(input:checked) label:not(:has(input:checked)) { display: none; }
+
+    /* cache l'icône calendrier du champ date à l'impression */
+    .date-bar input::-webkit-calendar-picker-indicator { display: none !important; }
+
+    /* mise en page compacte pour tenir sur une seule page */
+    header { padding-bottom: 10px; }
+    .brand img { max-height: 80px; }
+    .title h1 { font-size: 26px; }
+    .date-bar { margin-top: 10px; }
+    .client-info { margin-top: 12px; }
+    .address-encaissement { margin-top: 12px; }
+    #invoice { margin-top: 14px; }
+    #invoice tbody td { padding: 7px 12px; }
+    .bottom-section { margin-top: 16px; gap: 16px; }
+    .words textarea { min-height: 40px; resize: none; }
+    .totals td { padding: 6px 4px; }
+    .signature { margin-top: 14px; }
+    .sign-box { height: 60px; }
+    footer { margin-top: auto; padding-top: 10px; }   /* pied de page collé en bas */
+    footer p { font-size: 9.5px; margin: 2px 0; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 700px) {
+    .page { padding: 26px 18px 36px; }
+    header { flex-direction: column; gap: 16px; }
+    .title { text-align: left; }
+    .address-encaissement, .bottom-section { grid-template-columns: 1fr; }
+    .address-col { border-right: none; border-bottom: 1px solid var(--line-strong); }
+}

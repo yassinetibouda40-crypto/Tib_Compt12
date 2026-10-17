@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TIB COMPT</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --teal:#7fb8be;
+    --dark:#111;
+    --white:#fff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Poppins,sans-serif;
+    background:var(--teal);
+    overflow-x:hidden;
+}
+
+.page{
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:60px;
+}
+
+/* logo */
+
+.brandmark{
+
+    position:absolute;
+
+    top: -10px;px;
+    left:40px;
+}
+
+.brandmark img{
+
+    width:280px;
+}
+
+/* left */
+
+.left-block{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:45px;
+}
+
+.headline{
+
+    font-family:"Caveat",cursive;
+    font-size:70px;
+    color:black;
+    line-height:1.05;
+}
+
+.start-row{
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.start-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    text-decoration:none;
+
+    background:white;
+
+    color:black;
+
+    padding:18px 30px;
+
+    border-radius:50px;
+
+    font-size:24px;
+
+    font-weight:600;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.25);
+
+    transition:.25s;
+}
+
+.start-btn:hover{
+
+    transform:translateY(-4px);
+}
+
+.arrow{
+
+    width:40px;
+
+    height:40px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:var(--teal);
+
+    color:white;
+
+    font-size:22px;
+}
+
+.code-btn{
+
+    width:50px;
+
+    height:50px;
+
+    border-radius:50%;
+
+    border:none;
+
+    background:white;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.25);
+
+    transition:.25s;
+}
+
+.code-btn:hover{
+
+    transform:translateY(-4px);
+}
+
+/* right */
+
+.right-block{
+
+    width:500px;
+}
+
+.right-block img{
+
+    width:100%;
+}
+
+/* invoices */
+
+.saved-invoices{
+
+    display:none;
+
+    width:90%;
+
+    margin:auto;
+
+    margin-bottom:60px;
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+.saved-invoices table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+.saved-invoices th,
+.saved-invoices td{
+
+    padding:12px;
+
+    border-bottom:1px solid #ddd;
+
+    text-align:left;
+}
+
+.open-btn{
+
+    background:#4f9da3;
+
+    color:white;
+
+    border:none;
+
+    padding:8px 16px;
+
+    border-radius:30px;
+
+    cursor:pointer;
+}
+
+.delete-btn{
+
+    background:#cc3333;
+
+    color:white;
+
+    border:none;
+
+    padding:8px 16px;
+
+    border-radius:30px;
+
+    cursor:pointer;
+}
+
+@media(max-width:900px){
+
+.page{
+
+    flex-direction:column;
+
+    text-align:center;
+
+    gap:40px;
+}
+
+.brandmark{
+
+    position:relative;
+
+    top:0;
+    left:0;
+}
+
+.headline{
+
+    font-size:52px;
+}
+
+.right-block{
+
+    width:80%;
+}
+
+.start-row{
+
+    justify-content:center;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="page">
+
+<div class="brandmark">
+
+<img src="image/ChatGPT Image 30 juil. 2026, 08_49_46.png">
+
+</div>
+
+<div class="left-block">
+
+<h1 class="headline">
+
+Great facture With<br>
+
+Tib.Compt
+
+</h1>
+
+<div class="start-row">
+
+<a href="facture.html" class="start-btn" onclick="return demarrerFacture(event)">
+
+Get Started
+
+<span class="arrow">→</span>
+
+</a>
+
+<button class="code-btn" onclick="ouvrirFacturesAvecCode()">
+
+🔒
+
+</button>
+
+</div>
+
+</div>
+
+<div class="right-block">
+
+<img src="image/ss.png">
+
+</div>
+
+</div>
+
+<div class="saved-invoices" id="savedInvoices">
+
+</div>
+
+<script>
+
+const CODE_ACCES_FACTURES="2607";
+
+function demarrerFacture(e){
+
+e.preventDefault();
+
+const code=prompt("Entrez le code d'accès :");
+
+if(code===null) return false;
+
+if(code.trim()===CODE_ACCES_FACTURES){
+
+window.location.href="facture.html";
+
+}else{
+
+alert("Code incorrect");
+
+}
+
+return false;
+
+}
+
+function ouvrirFacturesAvecCode(){
+
+const code=prompt("Entrez le code d'accès :");
+
+if(code===null) return;
+
+if(code.trim()==CODE_ACCES_FACTURES){
+
+document.getElementById("savedInvoices").style.display="block";
+
+document.getElementById("savedInvoices").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}else{
+
+alert("Code incorrect");
+
+}
+
+}
+
+const CLE_FACTURES="tibcompt_factures_enregistrees";
+
+function afficherFacturesEnregistrees(){
+
+let cont=document.getElementById("savedInvoices");
+
+let factures=[];
+
+try{
+
+factures=JSON.parse(localStorage.getItem(CLE_FACTURES))||[];
+
+}catch{}
+
+if(factures.length==0){
+
+cont.innerHTML="<h2>Factures enregistrées</h2><br>Aucune facture.";
+
+return;
+
+}
+
+let html="<h2>Factures enregistrées</h2><table>";
+
+html+="<tr><th>N°</th><th>Date</th><th>Client</th><th>Total</th><th></th></tr>";
+
+factures.slice().reverse().forEach((f,r)=>{
+
+let i=factures.length-1-r;
+
+html+=`
+
+<tr>
+
+<td>${f.factureNum||""}</td>
+
+<td>${f.date||""}</td>
+
+<td>${f.client||""}</td>
+
+<td>${f.ttc||""}</td>
+
+<td>
+
+<button class="open-btn" onclick="ouvrirFactureEnregistree(${i})">
+
+Open
+
+</button>
+
+<button class="delete-btn" onclick="supprimerFactureEnregistree(${i})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+html+="</table>";
+
+cont.innerHTML=html;
+
+}
+
+afficherFacturesEnregistrees();
+
+function ouvrirFactureEnregistree(index){
+
+localStorage.setItem("tibcompt_facture_a_ouvrir",index);
+
+location.href="facture.html";
+
+}
+
+function supprimerFactureEnregistree(index){
+
+let factures=JSON.parse(localStorage.getItem(CLE_FACTURES))||[];
+
+if(!confirm("Supprimer cette facture ?")) return;
+
+factures.splice(index,1);
+
+localStorage.setItem(CLE_FACTURES,JSON.stringify(factures));
+
+afficherFacturesEnregistrees();
+
+}
+
+</script>
+
+</body>
+
+</html>

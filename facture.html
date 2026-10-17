@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facture - TIB COMPT</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+<div class="account-bar" id="accountBar"></div>
+
+<div class="page">
+
+    <div class="top-actions">
+        <button class="save-btn" onclick="enregistrerFacture()">💾 Enregistrer</button>
+        <button class="print-btn" onclick="window.print()">🖨 Imprimer la facture</button>
+    </div>
+
+    <header class="invoice-header">
+
+    <div class="brand">
+        <img src="image/h.png" alt="Logo">
+    </div>
+
+    <div class="title">
+        <h1>FACTURE</h1>
+        <div class="facture-num">
+            FACTURE N° :
+            <input type="text" id="factureNum" value="020452" readonly>
+        </div>
+    </div>
+
+</header>
+
+<div class="date-bar">
+    DATE : <input type="date">
+</div>
+
+    <section class="client-info">
+        <div class="client-line">
+            <span>CLIENT :</span>
+            <input type="text" placeholder="Nom du client" class="client-name">
+        </div>
+        <div class="client-line">
+            <span>ICE :</span>
+            <input type="text" placeholder="ICE">
+        </div>
+    </section>
+
+    <section class="address-encaissement">
+
+        <div class="address-col">
+            <div class="bar">ADRESSE DE FACTURATION</div>
+            <input type="text" class="address-input" placeholder="Adresse de facturation">
+        </div>
+
+        <div class="encaissement-col">
+            <div class="bar">ENCAISSEMENT</div>
+            <div class="checks">
+                <label><input type="checkbox"> CHEQUE</label>
+                <label><input type="checkbox"> ESPECE</label>
+                <label><input type="checkbox"> VIREMENT</label>
+            </div>
+            <div class="montant-row">
+                <span>N° ENCAISSEMENT</span>
+                <input type="text" id="encaissementNum">
+            </div>
+        </div>
+
+    </section>
+
+    <table id="invoice">
+
+        <thead>
+            <tr>
+                <th>PRESTATION</th>
+                <th class="col-qty">QUANTITÉ</th>
+                <th class="col-montant">MONTANT</th>
+                <th class="no-print"></th>
+            </tr>
+        </thead>
+
+        <tbody id="body">
+            <tr>
+                <td><input type="text" placeholder="Description de la prestation"></td>
+                <td><input type="number" value="1" min="0" class="qty"></td>
+                <td><input type="number" value="0" class="amount"></td>
+                <td class="no-print"><button type="button" class="delete-row" onclick="deleteRow(this)">🗑</button></td>
+            </tr>
+        </tbody>
+
+    </table>
+
+    <button class="add" onclick="addRow()">
+        + Ajouter une prestation
+    </button>
+
+    <div class="bottom-section">
+
+        <div class="words">
+            <b>Arrêtée la présente facture à la somme de :</b>
+            <textarea id="montantLettres" placeholder="Le montant s'écrit automatiquement..." readonly></textarea>
+        </div>
+
+        <table class="totals">
+            <tr>
+                <td>SOUS-TOTAL</td>
+                <td id="subtotal">0.00Dh</td>
+            </tr>
+            <tr>
+                <td>TAUX TVA&nbsp; 20%</td>
+                <td id="tva">0.00Dh</td>
+            </tr>
+            <tr class="grand">
+                <td>TOTAL TTC</td>
+                <td id="ttc">0.00Dh</td>
+            </tr>
+        </table>
+
+    </div>
+
+
+
+    <div class="signature">
+        <div class="sign-box"></div>
+    </div>
+
+    <footer>
+
+        <p><b>TIB COMPT</b> &nbsp; SARL d'associé unique au capital de 100.000 Dhs</p>
+
+        <p>Angle Bd Mourabitine et Rue Boukhari Immeuble Barhdadi Bureau N°: 05 OUJDA-MAROC</p>
+
+        <p>Tél : 05 36 70 47 91, Fax: 05 36 70 47 90 &nbsp; Site: www.tibcompt.com</p>
+
+        <p>RC: 17499 - TP: 10118227 - IF: 05301435 - CNSS: 6530853 - ICE: 000068031000052</p>
+
+        <p>RIB-BP : 157 570 21211 8878883 000 1 70</p>
+
+    </footer>
+
+</div>
+
+<button class="cta" onclick="window.location.href='tib_compt_banner.html'">
+    Learn More
+</button>
+
+<script src="auth.js"></script>
+<script>
+    // Bloque l'accès à la page si aucun compte n'est connecté
+    if (requireAuth()) {
+        renderAccountButton("#accountBar");
+    }
+</script>
+<script src="script.js"></script>
+<script>
+/* ===== Conversion automatique du montant TTC en lettres (français) ===== */
+(function () {
+
+    var UNITES = ["zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf",
+        "dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf"];
+    var DIZAINES = ["", "", "vingt", "trente", "quarante", "cinquante", "soixante", "soixante", "quatre-vingt", "quatre-vingt"];
+
+    function deuxChiffres(n) {
+        if (n < 20) return UNITES[n];
+        var d = Math.floor(n / 10), u = n % 10;
+        if (d === 7 || d === 9) {
+            var base = DIZAINES[d];
+            var reste = 10 + u;
+            var liaison = (u === 1 && d === 7) ? "-et-" : "-";
+            return base + liaison + UNITES[reste];
+        }
+        var mot = DIZAINES[d];
+        if (u === 0) {
+            mot += (d === 8) ? "s" : "";
+        } else if (u === 1 && d !== 8) {
+            mot += "-et-" + UNITES[u];
+        } else {
+            mot += "-" + UNITES[u];
+        }
+        return mot;
+    }
+
+    function troisChiffres(n, showCentUn) {
+        var c = Math.floor(n / 100), reste = n % 100;
+        var mots = "";
+        if (c > 0) {
+            mots += (c === 1 ? "cent" : UNITES[c] + " cent");
+            if (c > 1 && reste === 0) mots += "s";
+            if (reste > 0) mots += " ";
+        }
+        if (reste > 0) mots += deuxChiffres(reste);
+        return mots;
+    }
+
+    function nombreEnLettres(n) {
+        n = Math.floor(n);
+        if (n === 0) return "zéro";
+
+        var milliards = Math.floor(n / 1000000000);
+        var millions = Math.floor((n % 1000000000) / 1000000);
+        var milliers = Math.floor((n % 1000000) / 1000);
+        var unites = n % 1000;
+
+        var parties = [];
+
+        if (milliards > 0) {
+            parties.push((milliards === 1 ? "un milliard" : troisChiffres(milliards) + " milliards"));
+        }
+        if (millions > 0) {
+            parties.push((millions === 1 ? "un million" : troisChiffres(millions) + " millions"));
+        }
+        if (milliers > 0) {
+            parties.push((milliers === 1 ? "mille" : troisChiffres(milliers) + " mille"));
+        }
+        if (unites > 0) {
+            parties.push(troisChiffres(unites));
+        }
+
+        return parties.join(" ").trim();
+    }
+
+    function majusculePremiere(s) {
+        return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    function montantEnLettres(montant) {
+        montant = Math.round((parseFloat(montant) || 0) * 100) / 100;
+        var dirhams = Math.floor(montant);
+        var centimes = Math.round((montant - dirhams) * 100);
+
+        var texte = nombreEnLettres(dirhams) + " " + (dirhams > 1 ? "Dirhams" : "Dirham");
+
+        if (centimes > 0) {
+            texte += " et " + nombreEnLettres(centimes) + " " + (centimes > 1 ? "Centimes" : "Centime");
+        } else {
+            texte += " " + (dirhams > 1 ? "seuls" : "seul");
+        }
+
+        return majusculePremiere(texte);
+    }
+
+    function extraireMontant(texte) {
+        if (!texte) return 0;
+        var nettoye = texte.replace(/[^\d.,-]/g, "").replace(",", ".");
+        var val = parseFloat(nettoye);
+        return isNaN(val) ? 0 : val;
+    }
+
+    function mettreAJourLettres() {
+        var ttcEl = document.getElementById("ttc");
+        var zone = document.getElementById("montantLettres");
+        if (!ttcEl || !zone) return;
+        var montant = extraireMontant(ttcEl.textContent);
+        zone.value = montantEnLettres(montant);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        mettreAJourLettres();
+
+        var ttcEl = document.getElementById("ttc");
+        if (ttcEl && window.MutationObserver) {
+            var observer = new MutationObserver(mettreAJourLettres);
+            observer.observe(ttcEl, { childList: true, characterData: true, subtree: true });
+        }
+
+        // Filet de sécurité : recalcule aussi sur toute saisie dans la facture
+        document.addEventListener("input", function (e) {
+            if (e.target.closest("#invoice")) {
+                setTimeout(mettreAJourLettres, 50);
+            }
+        });
+    });
+
+})();
+</script>
+<script>
+/* ===== Numérotation automatique (Facture + Encaissement) ===== */
+(function () {
+
+    function prochainNumero(cle, longueur, depart) {
+        var valeur = parseInt(localStorage.getItem(cle), 10);
+        if (isNaN(valeur)) {
+            valeur = depart;
+        } else {
+            valeur += 1;
+        }
+        localStorage.setItem(cle, valeur);
+        return String(valeur).padStart(longueur, "0");
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Si on ouvre une facture déjà enregistrée, on garde ses propres numéros
+        // (chargés ensuite par script.js) au lieu d'en générer de nouveaux.
+        if (localStorage.getItem("tibcompt_facture_a_ouvrir") !== null) {
+            return;
+        }
+
+        var factureEl = document.getElementById("factureNum");
+        if (factureEl) {
+            factureEl.value = prochainNumero("tibcompt_facture_num", 6, 20426);
+        }
+
+        var encaissementEl = document.getElementById("encaissementNum");
+        if (encaissementEl) {
+            encaissementEl.value = "ENC-" + prochainNumero("tibcompt_encaissement_num", 6, 1);
+        }
+
+    });
+
+})();
+</script>
+
+</body>
+</html>
